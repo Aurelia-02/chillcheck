@@ -58,7 +58,8 @@ var S={scr:"stok",flt:"Semua",id:100,jam:"08:00",sel:null,
 items:[{id:1,name:"Ikan kembung",cat:"Seafood",st:1,ago:2,cust:null},{id:2,name:"Cabai rawit",cat:"Bumbu dapur",st:0,ago:0,cust:null},{id:3,name:"Bayam",cat:"Sayuran",st:1,ago:0,cust:8},{id:4,name:"Daging sapi",cat:"Daging",st:1,ago:0,cust:null},{id:5,name:"Pisang",cat:"Buah",st:0,ago:0,cust:null},{id:6,name:"Nugget ayam",cat:"Beku/kemasan",st:2,ago:0,exp:47}],
 A:null,B:null,C:null};
 function catOf(n){for(var c in DB){if(DB[c][n]!==undefined)return c}}
-function est(i){return DB[i.cat][i.name][i.st]}
+function catMin(c,s){var m=1e9;for(var n in DB[c]){var v=DB[c][n][s];if(v<m)m=v}return m}
+function est(i){return i.own?catMin(i.cat,i.st):DB[i.cat][i.name][i.st]}
 function eff(i){return i.cust!=null?i.cust:est(i)}
 function total(i){return i.exp!=null?i.exp:eff(i)}
 function left(i){return i.exp!=null?i.exp:eff(i)-i.ago}
@@ -81,7 +82,7 @@ stok:function(){
  var it=S.items.filter(function(i){return S.flt==="Semua"||i.cat===S.flt}).sort(function(a,b){return left(a)-left(b)});
  var h=top("ChillCheck")+'<div class="m">'+chips(["Semua"].concat(CATS),S.flt,"flt")+'<div class="k">Bahan aktif, diurutkan dari yang paling mendesak</div>';
  if(!it.length)h+='<div class="c t">'+(S.items.length?'Belum ada bahan di kategori ini. Pilih Tambah untuk mencatat belanjaan.':'Stok masih kosong. Pilih Tambah untuk mencatat belanjaan pertama.')+'</div>';
- it.forEach(function(i){h+='<button class="row" data-a="open" data-v="'+i.id+'"><div class="g"><div class="n">'+i.name+'</div><div class="t">'+i.cat+(' · '+ST[i.st]+' · '+(i.exp!=null?(i.dt==="Best before"?'best before':'kedaluwarsa'):'estimasi basi'))+'</div></div>'+badge(i)+'</button>'});
+ it.forEach(function(i){h+='<button class="row" data-a="open" data-v="'+i.id+'"><div class="g"><div class="n">'+esc(i.name)+'</div><div class="t">'+i.cat+(' · '+ST[i.st]+' · '+(i.exp!=null?(i.dt==="Best before"?'best before':'kedaluwarsa'):'estimasi basi'))+'</div></div>'+badge(i)+'</button>'});
  return h+'<div class="nt">Badge menunjukkan sisa waktu menurut estimasi basi atau tanggal kedaluwarsa kemasan.</div></div>'+DISC+nav("stok")},
 tambah:function(){
  function j(l,t,s,v){return '<button class="jal" data-a="start" data-v="'+v+'"><div class="ab">'+l+'</div><div class="g"><div class="n">'+t+'</div><div class="t">'+s+'</div></div><span aria-hidden="true">&#8250;</span></button>'}
@@ -111,18 +112,18 @@ C:function(){
   if(C.cat==="Beku/kemasan")h+=dts("dtC",C.dt||"Kedaluwarsa",0)+'<label class="lb" for="dc">Tanggal '+(C.dt||"Kedaluwarsa").toLowerCase()+' pada kemasan</label><input id="dc" class="in" type="date" min="'+TODAY+'" value="'+(C.date||"")+'" data-a="dateC">';
   else h+='<div class="k" style="margin:0 0 6px">Cara penyimpanan</div>'+seg(ST,C.st,"stC")+'<div class="t" style="margin-top:6px">Estimasi sistem: basi dalam '+DB[C.cat][C.name][C.st]+' hari</div>';
   h+='</div>'}
- return h+'</div><button class="pb" data-a="saveC"'+(C.name?'':' disabled style="opacity:.5"')+'>Hitung estimasi dan simpan</button>'+DISC},
+ return h+'</div><button class="sb" style="display:block;margin:0 16px;width:calc(100% - 32px)" data-a="ownstart">+ Bahan lain (tidak ada di daftar)</button><button class="pb" data-a="saveC"'+(C.name?'':' disabled style="opacity:.5"')+'>Hitung estimasi dan simpan</button>'+DISC},
 detail:function(){
  var i=S.items.filter(function(x){return x.id===S.sel})[0];
  if(!i){S.scr="stok";return V.stok()}
- var t=total(i),h=top(i.name,"stok")+'<div class="m"><div class="k">'+i.cat+' · dibeli '+(i.ago?i.ago+' hari lalu':'hari ini')+' · status aktif</div>';
+ var t=total(i),h=top(esc(i.name),"stok")+'<div class="m"><div class="k">'+i.cat+' · dibeli '+(i.ago?i.ago+' hari lalu':'hari ini')+' · status aktif</div>';
  if(i.exp==null){
   h+='<div class="c"><span class="lb">Cara penyimpanan</span>'+seg(ST,i.st,"stD")+'<div class="t" style="margin-top:6px">Estimasi dihitung ulang saat cara penyimpanan berubah.</div></div>'+
-  '<div class="c r"><div class="g"><div class="t">Estimasi sistem (tidak dapat diubah)</div><div class="n">'+est(i)+' hari</div></div><span class="bd">Dari database</span></div>'+
+  (i.own?'<div class="c r"><div class="g"><div class="t">Estimasi sistem (perkiraan umum kategori)</div><div class="n">'+est(i)+' hari</div></div><span class="bd am">Bahan lain</span></div>':'<div class="c r"><div class="g"><div class="t">Estimasi sistem (tidak dapat diubah)</div><div class="n">'+est(i)+' hari</div></div><span class="bd">Dari database</span></div>')+
   '<div class="c"><div class="t">Estimasi kustom</div><div class="r" style="margin:6px 0"><button class="sb" data-a="cm" aria-label="Kurangi satu hari">&#8722;</button><div class="n g" style="text-align:center;font-size:18px">'+eff(i)+' hari'+(i.cust==null?' (saran sistem)':'')+'</div><button class="sb" data-a="cp" aria-label="Tambah satu hari">+</button></div><button class="sb" style="width:100%" data-a="reset">Kembalikan ke saran sistem</button></div>';
   if(warn(i))h+='<div class="wn"><b>Estimasi kustom jauh melebihi saran sistem.</b> Periksa bau, warna, dan tekstur sebelum dikonsumsi.</div>';
  }else h+='<div class="c r"><div class="g"><div class="t">'+(i.dt==="Best before"?"Best before: mutu mulai menurun, belum tentu tidak aman":"Tanggal kedaluwarsa pada kemasan")+'</div><div class="n">'+t+' hari lagi</div></div><span class="bd">Dari kemasan</span></div>';
- var d1=Math.max(1,Math.round(t/2)),d3=Math.max(0,t-2);
+ var d1=Math.max(1,Math.round(t/2)),d3=Math.max(d1,t-2);
  h+='<div class="k">Notifikasi bertahap (pukul '+S.jam+')</div><div class="c"><div class="r"><span class="bd">1</span><div class="g">Informasi, hari ke-'+d1+': sebagian masa simpan terlewati</div></div><div class="r" style="margin:8px 0"><span class="bd am">2</span><div class="g">Peringatan, hari ke-'+d3+': sekitar H-2 sebelum estimasi basi</div></div><div class="r"><span class="bd rd">3</span><div class="g">Mendesak, hari ke-'+t+': pada hari estimasi</div></div></div>'+
  '<div class="sg" style="margin:0 16px 10px"><button data-a="cook">Tandai dimasak</button><button data-a="trash">Tandai dibuang</button></div></div>'+DISC;
  return h},
@@ -132,6 +133,11 @@ atur:function(){
  '<div class="c"><button class="sb" style="width:100%" data-a="go" data-v="notif">Lihat contoh notifikasi</button></div>'+
  '<div class="k" style="margin-top:14px">Privasi dan penafian</div><div class="c"><div class="t">Data tersimpan di perangkat. Foto struk dibaca di perangkat dan tidak disimpan.</div></div><div class="c"><div class="t">Estimasi hanyalah panduan dan tidak menggantikan pengecekan fisik bahan sebelum dikonsumsi.</div></div></div>'+nav("atur")}
 };
+V.own=function(){var O=S.O,pk=O.cat==="Beku/kemasan";
+return top("Bahan lain","C")+'<div class="m"><div class="wn">Bahan ini tidak ada di database. Estimasi memakai perkiraan umum dari kategori yang Anda pilih, jadi kurang spesifik dibanding bahan di daftar.</div><div class="c"><label class="lb" for="on">Nama bahan</label><input id="on" class="in" value="'+esc(O.name).replace(/"/g,"&quot;")+'" data-a="ownName" placeholder="Tulis nama bahan"></div><div class="k">Kategori</div>'+chips(CATS,O.cat,"ownCat")+
+(pk?'<div class="c">'+dts("dtO",O.dt,0)+'<label class="lb" for="od">Tanggal '+O.dt.toLowerCase()+' pada kemasan</label><input id="od" class="in" type="date" min="'+TODAY+'" value="'+(O.date||"")+'" data-a="dateO"></div>':
+'<div class="k">Cara penyimpanan</div><div style="margin:0 16px 10px">'+seg(ST,O.st,"stO")+'</div><div class="c"><div class="t">Perkiraan umum kategori '+O.cat+' ('+ST[O.st]+')</div><div class="n" style="font-size:18px">Basi dalam '+catMin(O.cat,O.st)+' hari</div><div class="t" style="margin-top:6px">Angka ini bisa Anda ubah nanti di layar detail.</div></div>')+
+'</div><button class="pb" data-a="saveO">Simpan ke stok</button>'+DISC};
 V.notif=function(){return top("Contoh notifikasi","atur")+'<div class="m"><div class="k">Tiga tahap notifikasi untuk satu bahan</div>'+ntf("","Informasi","Bayam sudah separuh masa simpan","Rencanakan untuk memasaknya dalam beberapa hari ke depan.")+ntf("am","Peringatan","Bayam diperkirakan basi sekitar 2 hari lagi","Masak lebih dulu agar tidak terbuang.")+ntf("rd","Mendesak","Hari ini perkiraan basi: bayam","Periksa bau, warna, dan tekstur sebelum memasak.")+'<div class="nt">Jeda H-2 adalah asumsi awal yang akan divalidasi pada pengguna.</div></div>'+DISC};
 V.err=function(){return top("Foto tidak terbaca","cam")+'<div class="m"><div class="wn"><b>Isi foto tidak bisa dikenali.</b> Foto terlalu buram atau gelap. Ambil ulang dengan cahaya yang lebih terang, atau catat tanpa foto.</div></div><button class="pb" data-a="go" data-v="cam">Foto ulang</button><button class="sb" style="display:block;margin:0 16px 10px;width:calc(100% - 32px)" data-a="start" data-v="C">Pilih dari daftar</button>'+DISC};
 var app=document.getElementById("app");
@@ -171,7 +177,19 @@ trash:function(){var i=cur();S.items=S.items.filter(function(x){return x!==i});g
 jam:function(v,e){S.jam=e.value||"08:00";toast("Jam pengingat: "+S.jam)},
 dtA:function(v,b){S.A[+b.getAttribute("data-k")].dt=v;keep();draw()},
 dtC:function(v){S.C.dt=v;keep();draw()},
-blur:function(){go("err")}
+blur:function(){go("err")},
+ownstart:function(){S.O={name:"",cat:S.C.cat,st:1,days:3,date:"",dt:"Kedaluwarsa"};go("own")},
+ownName:function(v){S.O.name=String(v).trim()},
+ownCat:function(v){S.O.cat=v;keep();draw()},
+stO:function(v){S.O.st=+v;keep();draw()},
+ownm:function(){S.O.days=Math.max(1,S.O.days-1);keep();draw()},
+ownp:function(){S.O.days=Math.min(365,S.O.days+1);keep();draw()},
+dtO:function(v){S.O.dt=v;keep();draw()},
+dateO:function(v){S.O.date=v},
+saveO:function(){var O=S.O;if(!O.name){toast("Isi nama bahan");return}
+if(O.cat==="Beku/kemasan"){if(!O.date){toast("Isi tanggal pada kemasan");return}add({name:O.name,cat:O.cat,st:2,ago:0,exp:days(O.date),dt:O.dt,own:true})}
+else add({name:O.name,cat:O.cat,st:O.st,ago:0,cust:null,own:true});
+S.flt="Semua";go("stok");toast(O.name+" disimpan ke stok")}
 };
 app.addEventListener("click",function(e){var b=e.target.closest("button[data-a]");if(b&&!b.disabled&&Act[b.getAttribute("data-a")])Act[b.getAttribute("data-a")](b.getAttribute("data-v"),b)});
 app.addEventListener("change",function(e){var t=e.target;if((t.tagName==="SELECT"||t.tagName==="INPUT")&&t.getAttribute("data-a")){Act[t.getAttribute("data-a")](t.value,t)}});
