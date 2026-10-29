@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>ChillCheck – Prototipe</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+:root{--bg:#F3F8F8;--card:#fff;--ink:#10292D;--mut:#44606A;--ln:#D5E3E4;--ac:#0E7C86;--acs:#DDF1F2;--act:#0B5F67;--am:#FFEFD5;--amt:#7A4300;--rd:#FDE3E3;--rdt:#9B1C1C;--out:#CFE0E1;--wnb:#FFF4E0;--wnl:#E8B96A;--wnt:#5E3600;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0D1B1D;--card:#15292C;--ink:#E6F2F2;--mut:#9DB8BC;--ln:#27403F;--ac:#2FB4BF;--acs:#12373B;--act:#8EE0E6;--am:#3A2A10;--amt:#FFD9A0;--rd:#3F1A1A;--rdt:#FFB4B4;--out:#08100F;--wnb:#33250E;--wnl:#7A5A20;--wnt:#FFE2B0}}
+:root[data-theme="dark"]{--bg:#0D1B1D;--card:#15292C;--ink:#E6F2F2;--mut:#9DB8BC;--ln:#27403F;--ac:#2FB4BF;--acs:#12373B;--act:#8EE0E6;--am:#3A2A10;--amt:#FFD9A0;--rd:#3F1A1A;--rdt:#FFB4B4;--out:#08100F;--wnb:#33250E;--wnl:#7A5A20;--wnt:#FFE2B0}
+html,body{margin:0;height:100%;background:var(--out);font-family:'Plus Jakarta Sans',system-ui,sans-serif;color:var(--ink)}
+body{display:flex;align-items:center;justify-content:center}
+#app{width:390px;height:min(820px,100%);background:var(--bg);border-radius:32px;border:8px solid var(--ink);box-sizing:border-box;display:flex;flex-direction:column;overflow:hidden;position:relative;font-size:14px;line-height:1.4}
+@media (max-width:500px){body{display:block}#app{width:100%;height:100%;border:0;border-radius:0}}
+button,input,select{font:inherit;color:var(--ink)}
+.top{display:flex;align-items:center;gap:8px;padding:20px 16px 10px}.top h1{margin:0;font-size:20px}
+.bk{min-width:44px;min-height:44px;border:0;background:var(--card);border-radius:12px;font-size:22px;cursor:pointer}
+.m{flex:1;overflow-y:auto;padding-bottom:8px;scrollbar-width:thin}
+.c{background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 14px;margin:0 16px 10px}
+.r{display:flex;align-items:center;gap:10px}.g{flex:1;min-width:0}.n{font-weight:700}
+.t{font-size:12px;color:var(--mut)}
+.bd{font-size:12px;font-weight:700;padding:4px 10px;border-radius:99px;background:var(--acs);color:var(--act);white-space:nowrap}
+.bd.am{background:var(--am);color:var(--amt)}.bd.rd{background:var(--rd);color:var(--rdt)}
+.pb{display:block;width:calc(100% - 32px);min-height:48px;margin:6px 16px 12px;border:0;border-radius:12px;background:var(--ac);color:#fff;font-weight:700;font-size:15px;cursor:pointer}
+.dk .pb{color:#062; }
+.sb{min-height:44px;border:1px solid var(--ac);background:var(--card);color:var(--act);border-radius:10px;font-weight:700;padding:0 14px;cursor:pointer}
+.sg{display:flex;gap:6px}.sg button{flex:1;min-height:44px;border:1px solid var(--ln);background:var(--card);border-radius:10px;cursor:pointer}
+.sg .on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
+.ch{display:flex;gap:6px;padding:0 16px 10px;overflow-x:auto;scrollbar-width:none}.ch::-webkit-scrollbar{display:none}
+.ch button{flex:none;min-height:36px;padding:0 12px;border-radius:99px;background:var(--card);border:1px solid var(--ln);font-size:13px;cursor:pointer}.ch .on{background:var(--ac);border-color:var(--ac);color:#fff;font-weight:700}
+.nav{display:flex;border-top:1px solid var(--ln);background:var(--card)}.nav button{flex:1;min-height:56px;border:0;background:none;color:var(--mut);cursor:pointer}.nav .on{color:var(--act);font-weight:700}
+.nt{font-size:11px;color:var(--mut);padding:0 16px 12px;text-align:center}
+.in{width:100%;box-sizing:border-box;min-height:44px;border:1px solid var(--ln);border-radius:10px;padding:0 12px;background:var(--card)}
+.wn{background:var(--wnb);border:1px solid var(--wnl);color:var(--wnt);border-radius:12px;padding:10px 12px;margin:0 16px 10px;font-size:13px}
+.lb{display:block;font-size:12px;font-weight:700;color:var(--mut);margin:0 0 6px}
+.k{margin:0 16px 6px;font-size:12px;font-weight:700;color:var(--mut)}
+.ab{width:36px;height:36px;border-radius:10px;background:var(--acs);color:var(--act);font-weight:800;display:flex;align-items:center;justify-content:center;flex:none}
+.jal{width:calc(100% - 32px);margin:0 16px 10px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 14px}
+.row{width:calc(100% - 32px);margin:0 16px 10px;text-align:left;cursor:pointer;display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--ln);border-radius:14px;padding:12px 14px}
+.cam{margin:0 16px 12px;height:360px;border-radius:16px;background:#0F1D1F;color:#B8CED1;display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;box-sizing:border-box}
+.ph{height:150px;background:var(--acs);color:var(--act);border-radius:12px;display:flex;align-items:center;justify-content:center;margin:0 16px 12px}
+#toast{position:absolute;left:16px;right:16px;bottom:76px;background:var(--ink);color:var(--bg);padding:10px 14px;border-radius:12px;font-weight:600;opacity:0;pointer-events:none;transition:opacity .2s}
+#toast.on{opacity:1}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--ac);outline-offset:2px}
+</style>
+</head>
+<body>
+<div id="app" role="application" aria-label="Prototipe aplikasi ChillCheck"></div>
+<script>
+(function(){
+// Nilai estimasi di bawah hanyalah contoh untuk demo, bukan isi database final.
+var ST=["Suhu ruang","Chiller","Freezer"];
+var DB={"Seafood":{"Ikan kembung":[1,2,90],"Udang":[1,2,90],"Cumi-cumi":[1,2,90]},"Daging":{"Daging ayam":[1,2,180],"Daging sapi":[1,3,180],"Hati ayam":[1,2,90]},"Sayuran":{"Bayam":[1,3,240],"Kangkung":[1,3,240],"Wortel":[5,21,240],"Tomat":[4,7,60]},"Buah":{"Pisang":[4,6,60],"Jeruk":[7,21,60],"Apel":[7,28,60]},"Bumbu dapur":{"Cabai rawit":[2,7,180],"Bawang merah":[30,60,180],"Jahe":[7,21,180],"Serai":[3,14,180]},"Beku/kemasan":{"Nugget ayam":0,"Sosis sapi":0}};
+var CATS=Object.keys(DB);
+var TODAY="2026-10-28";
+var S={scr:"stok",flt:"Semua",id:100,jam:"08:00",sel:null,
+items:[{id:1,name:"Ikan kembung",cat:"Seafood",st:1,ago:2,cust:null},{id:2,name:"Cabai rawit",cat:"Bumbu dapur",st:0,ago:0,cust:null},{id:3,name:"Bayam",cat:"Sayuran",st:1,ago:0,cust:8},{id:4,name:"Daging sapi",cat:"Daging",st:1,ago:0,cust:null},{id:5,name:"Pisang",cat:"Buah",st:0,ago:0,cust:null},{id:6,name:"Nugget ayam",cat:"Beku/kemasan",st:2,ago:0,exp:47}],
+A:null,B:null,C:null};
+function catOf(n){for(var c in DB){if(DB[c][n]!==undefined)return c}}
+function est(i){return DB[i.cat][i.name][i.st]}
+function eff(i){return i.cust!=null?i.cust:est(i)}
+function total(i){return i.exp!=null?i.exp:eff(i)}
+function left(i){return i.exp!=null?i.exp:eff(i)-i.ago}
+function ratio(c){return (c==="Seafood"||c==="Daging")?1.5:2}
+function warn(i){return i.exp==null&&i.cust!=null&&i.cust>ratio(i.cat)*est(i)}
+function badge(i){var l=left(i);var c=l<=0?"rd":l<=2?"am":"";var t=l<=0?"Hari ini":l<=2?"H-2":l+" hari";return '<span class="bd '+c+'">'+t+'</span>'}
+function days(v){return Math.round((Date.parse(v)-Date.parse(TODAY))/864e5)}
+function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;")}
+function top(t,back){return '<div class="top">'+(back?'<button class="bk" data-a="go" data-v="'+back+'" aria-label="Kembali">&#8249;</button>':'')+'<h1>'+t+'</h1></div>'}
+function nav(a){return '<div class="nav">'+[["stok","Stok"],["tambah","Tambah"],["atur","Pengaturan"]].map(function(x){return '<button data-a="go" data-v="'+x[0]+'" class="'+(a===x[0]?"on":"")+'">'+x[1]+'</button>'}).join("")+'</div>'}
+function seg(opts,on,act){return '<div class="sg">'+opts.map(function(o,i){return '<button data-a="'+act+'" data-v="'+i+'" class="'+(i===on?"on":"")+'">'+o+'</button>'}).join("")+'</div>'}
+var DISC='<div class="nt">Estimasi hanyalah panduan. Keputusan akhir ada pada pengecekan fisik bahan.</div>';
+function dts(act,v,k){return '<div class="sg" style="margin-bottom:8px">'+["Kedaluwarsa","Best before"].map(function(o){return '<button data-a="'+act+'" data-v="'+o+'" data-k="'+k+'" class="'+(o===v?"on":"")+'">'+o+'</button>'}).join("")+'</div>'}
+function ntf(cls,lab,t,b){return '<div class="c" style="display:flex;gap:10px"><div class="ab">C</div><div class="g"><div class="r"><span class="t g">ChillCheck · '+S.jam+'</span><span class="bd '+cls+'">'+lab+'</span></div><div class="n">'+t+'</div><div class="t" style="color:var(--ink)">'+b+'</div></div></div>'}
+function opts(sel,np){var h='<option value="">Pilih bahan</option>';CATS.forEach(function(c){if(np&&c==="Beku/kemasan")return;h+='<optgroup label="'+c+'">'+Object.keys(DB[c]).map(function(n){return '<option'+(n===sel?' selected':'')+'>'+n+'</option>'}).join("")+'</optgroup>'});return h}
+function chips(list,on,act){return '<div class="ch">'+list.map(function(c){return '<button data-a="'+act+'" data-v="'+c+'" class="'+(c===on?"on":"")+'">'+c+'</button>'}).join("")+'</div>'}
+
+var V={
+stok:function(){
+ var it=S.items.filter(function(i){return S.flt==="Semua"||i.cat===S.flt}).sort(function(a,b){return left(a)-left(b)});
+ var h=top("ChillCheck")+'<div class="m">'+chips(["Semua"].concat(CATS),S.flt,"flt")+'<div class="k">Bahan aktif, diurutkan dari yang paling mendesak</div>';
+ if(!it.length)h+='<div class="c t">'+(S.items.length?'Belum ada bahan di kategori ini. Pilih Tambah untuk mencatat belanjaan.':'Stok masih kosong. Pilih Tambah untuk mencatat belanjaan pertama.')+'</div>';
+ it.forEach(function(i){h+='<button class="row" data-a="open" data-v="'+i.id+'"><div class="g"><div class="n">'+i.name+'</div><div class="t">'+i.cat+(' · '+ST[i.st]+' · '+(i.exp!=null?(i.dt==="Best before"?'best before':'kedaluwarsa'):'estimasi basi'))+'</div></div>'+badge(i)+'</button>'});
+ return h+'<div class="nt">Badge menunjukkan sisa waktu menurut estimasi basi atau tanggal kedaluwarsa kemasan.</div></div>'+DISC+nav("stok")},
+tambah:function(){
+ function j(l,t,s,v){return '<button class="jal" data-a="start" data-v="'+v+'"><div class="ab">'+l+'</div><div class="g"><div class="n">'+t+'</div><div class="t">'+s+'</div></div><span aria-hidden="true">&#8250;</span></button>'}
+ return top("Tambah bahan","stok")+'<div class="m"><div class="k">Pilih cara mencatat belanjaan</div>'+j("A","Foto struk belanja","Belanja di minimarket. Nama barang dibaca otomatis.","A")+j("B","Foto barang","Belanja di pasar tradisional. AI menebak jenis bahan.","B")+j("C","Pilih dari daftar","Isi manual dengan memilih bahan dari daftar.","C")+'<div class="nt">Foto struk dibaca di perangkat dan tidak disimpan.</div></div>'+DISC},
+cam:function(){
+ var a=S.cam==="A";
+ return top("Ambil foto","tambah")+'<div class="m"><div class="cam">Arahkan kamera ke struk belanja atau bahan makanan hingga seluruh objek terlihat.</div><button class="pb" data-a="shot">Ambil foto</button><button class="sb" style="display:block;margin:0 16px 10px;width:calc(100% - 32px)" data-a="blur">Simulasikan foto buram</button></div>'+DISC},
+A:function(){
+ var h=top("Hasil baca struk","tambah")+'<div class="m"><div class="k">'+S.A.length+' baris barang terbaca. Periksa kategorinya.</div>';
+ S.A.forEach(function(r,k){
+  var c=r.name?catOf(r.name):null;
+  if(!r.name)h+='<div class="c"><div class="n">'+r.raw+'</div><div class="t" style="margin-bottom:8px">Tidak dikenali oleh kamus singkatan</div><select class="in" data-a="selA" data-k="'+k+'" aria-label="Pilih bahan untuk '+r.raw+'">'+opts("")+'</select></div>';
+  else{h+='<div class="c"><div class="r"><div class="g"><div class="n">'+r.raw+'</div><div class="t">Dibaca sebagai '+r.name.toLowerCase()+'</div></div><span class="bd">'+c+'</span></div>';
+   if(c==="Beku/kemasan")h+='<div style="margin-top:10px">'+dts("dtA",r.dt||"Kedaluwarsa",k)+'</div><label class="lb" for="d'+k+'">Tanggal '+(r.dt||"Kedaluwarsa").toLowerCase()+' pada kemasan</label><input id="d'+k+'" class="in" type="date" min="'+TODAY+'" value="'+(r.date||"")+'" data-a="dateA" data-k="'+k+'">';
+   h+='</div>'}
+ });
+ return h+'<div class="nt">Barang yang belum dipilih tidak ikut disimpan.</div></div><button class="pb" data-a="saveA">Simpan ke stok</button>'+DISC},
+B:function(){
+ var b=S.B,c=catOf(b.name),n=b.name;
+ var e=DB[c][n][b.st];
+ return top("Foto barang","tambah")+'<div class="m"><div class="ph">Foto barang</div><div class="c"><div class="t">Tebakan kecerdasan buatan</div><div class="r"><div class="g"><div class="n">'+n+'</div><div class="t">Kategori: '+c+'</div></div><button class="sb" data-a="koreksi">'+(b.edit?'Tutup':'Koreksi')+'</button></div>'+(b.edit?'<select class="in" style="margin-top:10px" data-a="selB" aria-label="Pilih bahan yang benar">'+opts(n,1)+'</select>':'')+'</div>'+
+ '<div class="k">Cara penyimpanan</div><div style="margin:0 16px 10px">'+seg(ST,b.st,"stB")+'</div><div class="c r"><div class="g"><div class="t">Estimasi sistem</div><div class="n">'+(c==="Beku/kemasan"?'Pakai tanggal kemasan':'Basi dalam '+e+' hari')+'</div></div><span class="bd">Dari database</span></div></div><button class="pb" data-a="saveB">Konfirmasi dan simpan</button>'+DISC},
+C:function(){
+ var C=S.C,h=top("Pilih dari daftar","tambah")+'<div class="m">'+chips(CATS,C.cat,"catC");
+ Object.keys(DB[C.cat]).forEach(function(n){h+='<button class="row" data-a="pickC" data-v="'+n+'" style="'+(C.name===n?'border-color:var(--ac)':'')+'"><div class="g"><div class="n">'+n+'</div><div class="t">'+C.cat+'</div></div><span class="bd">'+(C.name===n?"Dipilih":"Pilih")+'</span></button>'});
+ if(C.name){h+='<div class="c" style="border-color:var(--ac)"><div class="n" style="margin-bottom:10px">'+C.name+' dipilih</div>';
+  if(C.cat==="Beku/kemasan")h+=dts("dtC",C.dt||"Kedaluwarsa",0)+'<label class="lb" for="dc">Tanggal '+(C.dt||"Kedaluwarsa").toLowerCase()+' pada kemasan</label><input id="dc" class="in" type="date" min="'+TODAY+'" value="'+(C.date||"")+'" data-a="dateC">';
+  else h+='<div class="k" style="margin:0 0 6px">Cara penyimpanan</div>'+seg(ST,C.st,"stC")+'<div class="t" style="margin-top:6px">Estimasi sistem: basi dalam '+DB[C.cat][C.name][C.st]+' hari</div>';
+  h+='</div>'}
+ return h+'</div><button class="pb" data-a="saveC"'+(C.name?'':' disabled style="opacity:.5"')+'>Hitung estimasi dan simpan</button>'+DISC},
+detail:function(){
+ var i=S.items.filter(function(x){return x.id===S.sel})[0];
+ if(!i){S.scr="stok";return V.stok()}
+ var t=total(i),h=top(i.name,"stok")+'<div class="m"><div class="k">'+i.cat+' · dibeli '+(i.ago?i.ago+' hari lalu':'hari ini')+' · status aktif</div>';
+ if(i.exp==null){
+  h+='<div class="c"><span class="lb">Cara penyimpanan</span>'+seg(ST,i.st,"stD")+'<div class="t" style="margin-top:6px">Estimasi dihitung ulang saat cara penyimpanan berubah.</div></div>'+
+  '<div class="c r"><div class="g"><div class="t">Estimasi sistem (tidak dapat diubah)</div><div class="n">'+est(i)+' hari</div></div><span class="bd">Dari database</span></div>'+
+  '<div class="c"><div class="t">Estimasi kustom</div><div class="r" style="margin:6px 0"><button class="sb" data-a="cm" aria-label="Kurangi satu hari">&#8722;</button><div class="n g" style="text-align:center;font-size:18px">'+eff(i)+' hari'+(i.cust==null?' (saran sistem)':'')+'</div><button class="sb" data-a="cp" aria-label="Tambah satu hari">+</button></div><button class="sb" style="width:100%" data-a="reset">Kembalikan ke saran sistem</button></div>';
+  if(warn(i))h+='<div class="wn"><b>Estimasi kustom jauh melebihi saran sistem.</b> Periksa bau, warna, dan tekstur sebelum dikonsumsi.</div>';
+ }else h+='<div class="c r"><div class="g"><div class="t">'+(i.dt==="Best before"?"Best before: mutu mulai menurun, belum tentu tidak aman":"Tanggal kedaluwarsa pada kemasan")+'</div><div class="n">'+t+' hari lagi</div></div><span class="bd">Dari kemasan</span></div>';
+ var d1=Math.max(1,Math.round(t/2)),d3=Math.max(0,t-2);
+ h+='<div class="k">Notifikasi bertahap (pukul '+S.jam+')</div><div class="c"><div class="r"><span class="bd">1</span><div class="g">Informasi, hari ke-'+d1+': sebagian masa simpan terlewati</div></div><div class="r" style="margin:8px 0"><span class="bd am">2</span><div class="g">Peringatan, hari ke-'+d3+': sekitar H-2 sebelum estimasi basi</div></div><div class="r"><span class="bd rd">3</span><div class="g">Mendesak, hari ke-'+t+': pada hari estimasi</div></div></div>'+
+ '<div class="sg" style="margin:0 16px 10px"><button data-a="cook">Tandai dimasak</button><button data-a="trash">Tandai dibuang</button></div></div>'+DISC;
+ return h},
+atur:function(){
+ return top("Pengaturan")+'<div class="m"><div class="k">Pengingat</div><div class="c"><label class="lb" for="jm">Jam pengingat bawaan</label><input id="jm" class="in" type="time" value="'+S.jam+'" data-a="jam"></div>'+
+ '<div class="c"><div class="n" style="margin-bottom:8px">Tahapan notifikasi</div><div class="t">1. Informasi saat sebagian masa simpan terlewati (titik waktunya ditetapkan tim; di prototipe: setengah masa simpan)</div><div class="t">2. Peringatan sekitar H-2 sebelum estimasi basi (asumsi awal)</div><div class="t">3. Mendesak pada hari estimasi</div></div>'+
+ '<div class="c"><button class="sb" style="width:100%" data-a="go" data-v="notif">Lihat contoh notifikasi</button></div>'+
+ '<div class="k" style="margin-top:14px">Privasi dan penafian</div><div class="c"><div class="t">Data tersimpan di perangkat. Foto struk dibaca di perangkat dan tidak disimpan.</div></div><div class="c"><div class="t">Estimasi hanyalah panduan dan tidak menggantikan pengecekan fisik bahan sebelum dikonsumsi.</div></div></div>'+nav("atur")}
+};
+V.notif=function(){return top("Contoh notifikasi","atur")+'<div class="m"><div class="k">Tiga tahap notifikasi untuk satu bahan</div>'+ntf("","Informasi","Bayam sudah separuh masa simpan","Rencanakan untuk memasaknya dalam beberapa hari ke depan.")+ntf("am","Peringatan","Bayam diperkirakan basi sekitar 2 hari lagi","Masak lebih dulu agar tidak terbuang.")+ntf("rd","Mendesak","Hari ini perkiraan basi: bayam","Periksa bau, warna, dan tekstur sebelum memasak.")+'<div class="nt">Jeda H-2 adalah asumsi awal yang akan divalidasi pada pengguna.</div></div>'+DISC};
+V.err=function(){return top("Foto tidak terbaca","cam")+'<div class="m"><div class="wn"><b>Isi foto tidak bisa dikenali.</b> Foto terlalu buram atau gelap. Ambil ulang dengan cahaya yang lebih terang, atau catat tanpa foto.</div></div><button class="pb" data-a="go" data-v="cam">Foto ulang</button><button class="sb" style="display:block;margin:0 16px 10px;width:calc(100% - 32px)" data-a="start" data-v="C">Pilih dari daftar</button>'+DISC};
+var app=document.getElementById("app");
+function toast(m){var t=document.getElementById("toast");t.textContent=m;t.className="on";clearTimeout(toast.h);toast.h=setTimeout(function(){t.className=""},1800)}
+function draw(){var k=S.scr;app.innerHTML=V[k]()+'<div id="toast" role="status"></div>';var m=app.querySelector(".m");if(m&&S.keep){m.scrollTop=S.keep;S.keep=0}}
+function go(s){S.scr=s;draw()}
+function add(o){o.id=S.id++;S.items.push(o)}
+function cur(){return S.items.filter(function(x){return x.id===S.sel})[0]}
+function keep(){var m=app.querySelector(".m");S.keep=m?m.scrollTop:0}
+var Act={
+go:function(v){go(v)},
+flt:function(v){S.flt=v;draw()},
+open:function(v){S.sel=+v;go("detail")},
+start:function(v){if(v==="C"){S.C={cat:"Sayuran",name:"Bayam",st:1,date:""};go("C")}else{S.cam=v;go("cam")}},
+shot:function(){if(S.cam==="A"){S.A=[{raw:"AYM FILLET 500G",name:"Daging ayam"},{raw:"BAYAM IKAT",name:"Bayam"},{raw:"NUGGET AYM 450",name:"Nugget ayam",date:"2026-12-14"},{raw:"XYZ 8821",name:null}];go("A")}else{S.B={name:"Cabai rawit",st:0,edit:false};go("B")}},
+selA:function(v,e){var k=+e.getAttribute("data-k");keep();S.A[k].name=e.value||null;S.A[k].date="";draw()},
+dateA:function(v,e){S.A[+e.getAttribute("data-k")].date=e.value},
+saveA:function(){var ok=true,n=0;S.A.forEach(function(r){if(!r.name)return;var c=catOf(r.name);if(c==="Beku/kemasan"&&!r.date)ok=false});
+ if(!ok){toast("Isi tanggal kedaluwarsa untuk produk kemasan");return}
+ S.A.forEach(function(r){if(!r.name)return;var c=catOf(r.name);n++;add(c==="Beku/kemasan"?{name:r.name,cat:c,st:2,ago:0,exp:days(r.date),dt:r.dt||"Kedaluwarsa"}:{name:r.name,cat:c,st:1,ago:0,cust:null})});
+ S.flt="Semua";go("stok");toast(n+" bahan disimpan ke stok")},
+koreksi:function(){S.B.edit=!S.B.edit;draw()},
+selB:function(v,e){if(e.value){S.B.name=e.value;S.B.edit=false;draw()}},
+stB:function(v){S.B.st=+v;draw()},
+saveB:function(){var b=S.B,c=catOf(b.name);if(c==="Beku/kemasan"){toast("Produk kemasan dicatat lewat jalur A atau C");return}add({name:b.name,cat:c,st:b.st,ago:0,cust:null});S.flt="Semua";go("stok");toast(b.name+" disimpan ke stok")},
+catC:function(v){S.C={cat:v,name:null,st:1,date:""};draw()},
+pickC:function(v){keep();S.C.name=v;draw()},
+stC:function(v){keep();S.C.st=+v;draw()},
+dateC:function(v,e){S.C.date=e.value},
+saveC:function(){var C=S.C;if(!C.name)return;if(C.cat==="Beku/kemasan"){if(!C.date){toast("Isi tanggal kedaluwarsa pada kemasan");return}add({name:C.name,cat:C.cat,st:2,ago:0,exp:days(C.date),dt:C.dt||"Kedaluwarsa"})}else add({name:C.name,cat:C.cat,st:C.st,ago:0,cust:null});S.flt="Semua";go("stok");toast(C.name+" disimpan ke stok")},
+stD:function(v){var i=cur();i.st=+v;i.cust=null;keep();draw()},
+cm:function(){var i=cur();i.cust=Math.max(1,eff(i)-1);keep();draw()},
+cp:function(){var i=cur();i.cust=eff(i)+1;keep();draw()},
+reset:function(){cur().cust=null;keep();draw();toast("Kembali ke saran sistem")},
+cook:function(){var i=cur();S.items=S.items.filter(function(x){return x!==i});go("stok");toast(i.name+" ditandai dimasak")},
+trash:function(){var i=cur();S.items=S.items.filter(function(x){return x!==i});go("stok");toast(i.name+" ditandai dibuang")},
+jam:function(v,e){S.jam=e.value||"08:00";toast("Jam pengingat: "+S.jam)},
+dtA:function(v,b){S.A[+b.getAttribute("data-k")].dt=v;keep();draw()},
+dtC:function(v){S.C.dt=v;keep();draw()},
+blur:function(){go("err")}
+};
+app.addEventListener("click",function(e){var b=e.target.closest("button[data-a]");if(b&&!b.disabled&&Act[b.getAttribute("data-a")])Act[b.getAttribute("data-a")](b.getAttribute("data-v"),b)});
+app.addEventListener("change",function(e){var t=e.target;if((t.tagName==="SELECT"||t.tagName==="INPUT")&&t.getAttribute("data-a")){Act[t.getAttribute("data-a")](t.value,t)}});
+draw();
+})();
+</script>
+</body>
+</html>
